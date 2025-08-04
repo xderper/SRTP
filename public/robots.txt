@@ -1,0 +1,52 @@
+User-agent: *
+Allow: /
+
+# Основные страницы
+Allow: /
+Allow: /catalog
+Allow: /about
+Allow: /contacts
+Allow: /delivery
+Allow: /product/*
+
+# Служебные страницы (разрешаем индексацию для доверия)
+Allow: /privacy
+Allow: /terms
+Allow: /offer
+Allow: /return
+Allow: /requisites
+Allow: /payment
+
+# Запрещаем служебные директории
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Разрешаем изображения и ресурсы
+Allow: /images/
+Allow: /public/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.ico
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Указываем местоположение sitemap
+Sitemap: https://greentools.ru/sitemap.xml
+
+# Задержка между запросами (в секундах)
+Crawl-delay: 1
+
+# Специальные настройки для популярных ботов
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1 
