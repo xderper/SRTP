@@ -12,7 +12,7 @@ export default function Offer() {
               <h2 className="text-xl font-medium text-white mb-4">1. Общие положения</h2>
               <p className="mb-4">
                 Данная публичная оферта (далее — «Оферта») является официальным предложением 
-                ИП Иванов Иван Иванович (далее — «Продавец») для физических и юридических лиц 
+                ИП Осипов Михаил Александрович (далее — «Продавец») для физических и юридических лиц 
                 (далее — «Покупатель») на заключение договора купли-продажи товаров, 
                 представленных в интернет-магазине greentools.ru.
               </p>
@@ -35,7 +35,6 @@ export default function Offer() {
                 <li>Плоскорезы различных типов и размеров</li>
                 <li>Садовые инструменты и инвентарь</li>
                 <li>Корнеудалители и рыхлители</li>
-                <li>Парники и укрывные материалы</li>
                 <li>Садовые аксессуары</li>
               </ul>
             </section>
@@ -157,10 +156,11 @@ export default function Offer() {
             <section>
               <h2 className="text-xl font-medium text-white mb-4">11. Реквизиты продавца</h2>
               <div className="bg-gray-800 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-white mb-4">ИП Иванов Иван Иванович</h3>
+                <h3 className="text-lg font-medium text-white mb-4">ИП Осипов Михаил Александрович</h3>
                 <ul className="list-none space-y-2">
-                  <li><strong>ОГРНИП:</strong> 123456789012345</li>
-                  <li><strong>ИНН:</strong> 123456789012</li>
+                  <li><strong>ОГРНИП:</strong> 319774600060600
+                  </li>
+                  <li><strong>ИНН:</strong> 771823734281</li>
                   <li><strong>Юридический адрес:</strong> 123456, г. Москва, ул. Примерная, д. 1</li>
                   <li><strong>Фактический адрес:</strong> 123456, г. Москва, ул. Примерная, д. 1</li>
                   <li><strong>Телефон:</strong> +7 (495) 123-45-67</li>

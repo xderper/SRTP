@@ -124,15 +124,15 @@ export default function Legal() {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <div className="text-gray-400 text-sm">Наименование</div>
-                <div className="text-white font-medium">ИП Иванов Иван Иванович</div>
+                <div className="text-white font-medium">ИП Осипов Михаил Александрович</div>
               </div>
               <div>
                 <div className="text-gray-400 text-sm">ОГРНИП</div>
-                <div className="text-white font-medium">123456789012345</div>
+                <div className="text-white font-medium">319774600060600</div>
               </div>
               <div>
                 <div className="text-gray-400 text-sm">ИНН</div>
-                <div className="text-white font-medium">123456789012</div>
+                <div className="text-white font-medium">771823734281</div>
               </div>
               <div>
                 <div className="text-gray-400 text-sm">Год начала деятельности</div>

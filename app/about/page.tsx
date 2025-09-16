@@ -34,26 +34,6 @@ export default function About() {
     }
   ];
 
-  const team = [
-    {
-      name: 'Александр Петров',
-      position: 'Основатель и генеральный директор',
-      experience: '15 лет в садоводстве',
-      image: '👨‍💼'
-    },
-    {
-      name: 'Елена Сидорова',
-      position: 'Менеджер по продажам',
-      experience: '8 лет в продажах садового инвентаря',
-      image: '👩‍💼'
-    },
-    {
-      name: 'Сергей Иванов',
-      position: 'Специалист по подбору инструментов',
-      experience: '12 лет работы агрономом',
-      image: '👨‍🔬'
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-black data-grid">
@@ -85,7 +65,7 @@ export default function About() {
               </p>
               <p>
                 За годы работы мы расширили ассортимент, добавив плоскорезы Краб, Аист, Гидра, Дракон, Лепесток, 
-                корнеудалители, рыхлители Z3 и Z4, парники Комби и туннельные укрытия, садовые бордюры, наколенники, 
+                корнеудалители, рыхлители Z3 и Z4, садовые бордюры, наколенники, 
                 кустодержатели и другие качественные садовые инструменты. Но плоскорезы Фокина и Стриж остаются 
                 нашей главной специализацией.
               </p>
@@ -150,22 +130,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* Team */}
-        <div className="mb-16">
-          <h2 className="fintech-headline text-3xl font-light text-center mb-12">
-            Наша <span className="text-green-400">команда</span>
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="dark-card rounded-lg p-6 text-center">
-                <div className="text-6xl mb-4">{member.image}</div>
-                <h3 className="text-white text-lg font-medium mb-2">{member.name}</h3>
-                <p className="text-green-400 text-sm mb-2">{member.position}</p>
-                <p className="fintech-subtext text-sm">{member.experience}</p>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Statistics */}
         <div className="dark-card rounded-lg p-8 mb-16">
@@ -206,8 +170,8 @@ export default function About() {
             <div className="flex items-center space-x-4 p-4 border border-gray-800 rounded">
               <div className="text-2xl">🏢</div>
               <div>
-                <div className="text-white font-medium">ИП Петров А.В.</div>
-                <div className="fintech-subtext text-sm">ОГРНИП: 123456789012345</div>
+                <div className="text-white font-medium">ИП Осипов М.А.</div>
+                <div className="fintech-subtext text-sm">ОГРНИП:319774600060600</div>
               </div>
             </div>
             <div className="flex items-center space-x-4 p-4 border border-gray-800 rounded">
