@@ -19,6 +19,26 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+# Проверяем и устанавливаем docker-compose
+if ! command -v docker-compose &> /dev/null; then
+    echo -e "${YELLOW}📦 Устанавливаем docker-compose...${NC}"
+    
+    # Определяем архитектуру
+    ARCH=$(uname -m)
+    case $ARCH in
+        x86_64) ARCH="x86_64" ;;
+        aarch64) ARCH="aarch64" ;;
+        armv7l) ARCH="armv7" ;;
+        *) echo -e "${RED}❌ Неподдерживаемая архитектура: $ARCH${NC}"; exit 1 ;;
+    esac
+    
+    # Скачиваем и устанавливаем docker-compose
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$ARCH" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    
+    echo -e "${GREEN}✅ Docker-compose установлен${NC}"
+fi
+
 echo -e "${GREEN}🚀 Начинаем деплой сайта $DOMAIN${NC}"
 
 # Обновляем домен в nginx.conf
