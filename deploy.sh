@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Конфигурация
-VPS_HOST="45.12.72.165"
+VPS_HOST="your-vps-ip"
 VPS_USER="root"
 APP_NAME="garden-tools"
 APP_PORT="3000"
-DOMAIN="grvio.ru"
+DOMAIN="your-domain.com"
 
 # Цвета для вывода
 RED='\033[0;31m'
@@ -22,19 +22,19 @@ if ! ssh -o ConnectTimeout=10 $VPS_USER@$VPS_HOST "echo 'Подключение 
     exit 1
 fi
 
-# Создаем директорию приложения на VPS
-echo -e "${YELLOW}📁 Создаем директорию приложения на VPS...${NC}"
-ssh $VPS_USER@$VPS_HOST "mkdir -p /opt/$APP_NAME"
+# Создаем временный скрипт для выполнения на VPS
+cat > /tmp/deploy_script.sh << 'SCRIPT'
+#!/bin/bash
 
-# Копируем файлы на VPS
-echo -e "${YELLOW}📤 Копируем файлы на VPS...${NC}"
-rsync -avz --exclude 'node_modules' --exclude '.next' --exclude '.git' --exclude 'ssl' ./ $VPS_USER@$VPS_HOST:/opt/$APP_NAME/
+APP_NAME="$1"
+DOMAIN="$2"
 
-# Устанавливаем Docker на VPS (если не установлен)
-echo -e "${YELLOW}🐳 Проверяем Docker на VPS...${NC}"
-ssh $VPS_USER@$VPS_HOST "
+echo "📁 Создаем директорию приложения..."
+mkdir -p /opt/$APP_NAME
+
+echo "🐳 Проверяем Docker..."
 if ! command -v docker &> /dev/null; then
-    echo 'Устанавливаем Docker...'
+    echo "Устанавливаем Docker..."
     curl -fsSL https://get.docker.com -o get-docker.sh
     sh get-docker.sh
     systemctl start docker
@@ -42,41 +42,46 @@ if ! command -v docker &> /dev/null; then
 fi
 
 if ! command -v docker-compose &> /dev/null; then
-    echo 'Устанавливаем Docker Compose...'
-    curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-\$(uname -s)-\$(uname -m)\" -o /usr/local/bin/docker-compose
+    echo "Устанавливаем Docker Compose..."
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
 fi
-"
 
-# Обновляем конфигурацию Nginx с доменом
-echo -e "${YELLOW}⚙️ Настраиваем Nginx...${NC}"
-ssh $VPS_USER@$VPS_HOST "
+echo "⚙️ Настраиваем Nginx..."
 cd /opt/$APP_NAME
-sed -i 's/your-domain.com/$DOMAIN/g' nginx.conf
-"
+if [ -f nginx.conf ]; then
+    sed -i "s/your-domain.com/$DOMAIN/g" nginx.conf
+fi
 
-# Останавливаем старые контейнеры
-echo -e "${YELLOW}🛑 Останавливаем старые контейнеры...${NC}"
-ssh $VPS_USER@$VPS_HOST "cd /opt/$APP_NAME && docker-compose down || true"
+echo "🛑 Останавливаем старые контейнеры..."
+docker-compose down || true
 
-# Собираем и запускаем новые контейнеры
-echo -e "${YELLOW}🔨 Собираем и запускаем приложение...${NC}"
-ssh $VPS_USER@$VPS_HOST "
-cd /opt/$APP_NAME
+echo "🔨 Собираем и запускаем приложение..."
 docker-compose build --no-cache
 docker-compose up -d
-"
 
-# Проверяем статус
-echo -e "${YELLOW}🔍 Проверяем статус приложения...${NC}"
+echo "🔍 Проверяем статус приложения..."
 sleep 10
-if ssh $VPS_USER@$VPS_HOST "curl -f http://localhost > /dev/null 2>&1"; then
-    echo -e "${GREEN}✅ Приложение успешно развернуто!${NC}"
-    echo -e "${GREEN}🌐 Доступно по адресу: http://$VPS_HOST${NC}"
-    echo -e "${YELLOW}📝 Для настройки SSL выполните на VPS: ./setup-ssl.sh${NC}"
+if curl -f http://localhost > /dev/null 2>&1; then
+    echo "✅ Приложение успешно развернуто!"
+    echo "🌐 Доступно по адресу: http://$(curl -s ifconfig.me)"
+    echo "📝 Для настройки SSL выполните: ./setup-ssl.sh"
 else
-    echo -e "${RED}❌ Приложение не запустилось. Проверьте логи:${NC}"
-    ssh $VPS_USER@$VPS_HOST "cd /opt/$APP_NAME && docker-compose logs"
+    echo "❌ Приложение не запустилось. Проверьте логи:"
+    docker-compose logs
 fi
+SCRIPT
+
+# Копируем файлы на VPS
+echo -e "${YELLOW}📤 Копируем файлы на VPS...${NC}"
+rsync -avz --exclude 'node_modules' --exclude '.next' --exclude '.git' --exclude 'ssl' ./ $VPS_USER@$VPS_HOST:/opt/$APP_NAME/
+
+# Копируем и выполняем скрипт на VPS одним SSH соединением
+echo -e "${YELLOW}🔨 Выполняем деплой на VPS...${NC}"
+scp /tmp/deploy_script.sh $VPS_USER@$VPS_HOST:/tmp/
+ssh $VPS_USER@$VPS_HOST "chmod +x /tmp/deploy_script.sh && /tmp/deploy_script.sh $APP_NAME $DOMAIN"
+
+# Удаляем временный файл
+rm /tmp/deploy_script.sh
 
 echo -e "${GREEN}🎉 Деплой завершен!${NC}"

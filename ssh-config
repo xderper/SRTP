@@ -1,0 +1,15 @@
+# SSH конфигурация для автоматического подключения к VPS
+# Скопируйте этот файл в ~/.ssh/config
+
+Host vps
+    HostName your-vps-ip
+    User root
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    ControlMaster auto
+    ControlPath /tmp/ssh-%r@%h:%p
+    ControlPersist 60s
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
