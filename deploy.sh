@@ -39,6 +39,28 @@ if ! command -v docker-compose &> /dev/null; then
     echo -e "${GREEN}✅ Docker-compose установлен${NC}"
 fi
 
+# Проверяем и запускаем Docker daemon
+if ! docker info &> /dev/null; then
+    echo -e "${YELLOW}🐳 Запускаем Docker daemon...${NC}"
+    
+    # Проверяем, установлен ли Docker
+    if ! command -v docker &> /dev/null; then
+        echo -e "${YELLOW}📦 Устанавливаем Docker...${NC}"
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sh get-docker.sh
+        rm get-docker.sh
+    fi
+    
+    # Запускаем Docker daemon
+    systemctl start docker
+    systemctl enable docker
+    
+    # Добавляем текущего пользователя в группу docker
+    usermod -aG docker $USER
+    
+    echo -e "${GREEN}✅ Docker daemon запущен${NC}"
+fi
+
 echo -e "${GREEN}🚀 Начинаем деплой сайта $DOMAIN${NC}"
 
 # Обновляем домен в nginx.conf
