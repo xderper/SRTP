@@ -1,6 +1,12 @@
 # Используем официальный Node.js образ как базовый
 FROM node:18-alpine AS base
 
+# Устанавливаем docker-compose
+RUN apk add --no-cache curl && \
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose && \
+    apk del curl
+
 # Устанавливаем зависимости только при необходимости
 FROM base AS deps
 # Проверяем https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine для понимания, почему может понадобиться libc6-compat.
